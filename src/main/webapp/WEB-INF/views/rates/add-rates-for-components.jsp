@@ -19,9 +19,9 @@
 
     Podaj stawki za miesiąc: <br>
 
-    <form:form method="post" modelAttribute="rateComponentContainer" action="/app/rateschema/generate-rate-schema">
+    <form:form method="post" modelAttribute="rateSchema" action="/app/rateschema/generate-rate-schema">
 
-        <c:forEach items="${rateComponentContainer.componentList}" var="component" varStatus="status">
+        <c:forEach items="${rateSchema.componentList}" var="component" varStatus="status">
             <form:hidden path="componentList[${status.index}].type"/>
             <form:input path="componentList[${status.index}].plDescription" readonly="true"/>
             <input type="text" value="Stawka stała za miesiąc:" disabled="disabled">
@@ -33,10 +33,6 @@
         </c:forEach>
 
         <input type="submit" value="Zatwierdź">
-
-
-
-
 
     </form:form>
 

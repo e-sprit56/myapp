@@ -27,8 +27,10 @@ public class PropertyServiceImpl {
     }
 
     public List<Property> getPropertyList(User user){
-
-
         return propertyRepository.getPropertiesByOwner(user);
+    }
+
+    public Property getProperty(long propertyId){
+        return propertyRepository.getPropertyById(propertyId);
     }
 }

@@ -20,6 +20,9 @@ Wybierz element do rozliczeń
 
 <form method=post action="/app/rateschema/add-rates-for-components">
 
+   <input type="hidden" value="<c:out value="${propertyId}"/>" name="propertyId"/>
+
+
 <c:forEach items="${components}" var="component">
 
     ${component}<input type="checkbox" value="${component}" name="components">
@@ -32,20 +35,6 @@ Wybierz element do rozliczeń
 
 </form>
 </div>
-
-<%--<c:form method="post" modelAttribute="components">--%>
-
-<%--    Wybierz elementy do rozliczeń <br>--%>
-
-<%--    <form:checkboxes path="components" items="${components}"/>--%>
-
-
-<%--    <button type="submit">Zatwierdź</button>--%>
-
-<%--    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">--%>
-<%--    --%>
-<%--    --%>
-<%--</c:form>--%>
 
 </body>
 </html>

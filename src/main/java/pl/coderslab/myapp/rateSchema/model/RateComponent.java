@@ -27,11 +27,11 @@ public class RateComponent {
 
     private Type type;
 
-    @DecimalMin(value = "0.0", inclusive = true)
+    @DecimalMin(value = "0.0", inclusive = true, message = "podaj wartość liczbową w formacie 00.00")
     @Digits(integer=4, fraction=2)
     private BigDecimal fixedRate;
 
-    @DecimalMin(value = "0.0", inclusive = true)
+    @DecimalMin(value = "0.0", inclusive = true, message = "podaj wartość liczbową w formacie 00.00")
     @Digits(integer=4, fraction=3)
     private BigDecimal variableRate;
 

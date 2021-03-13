@@ -2,12 +2,12 @@ package pl.coderslab.myapp.rateSchema.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import pl.coderslab.myapp.property.model.Property;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Data
@@ -20,7 +20,7 @@ public class RateSchema {
     @ManyToOne
     private Property property;
     @OneToMany
-    private Set<RateComponent> rateComponents;
-
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private List<RateComponent> componentList;
 
 }

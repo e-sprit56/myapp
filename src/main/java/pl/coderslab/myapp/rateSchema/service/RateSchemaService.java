@@ -13,11 +13,10 @@ import java.util.*;
 
 @Service
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class RateSchemaService {
 
-    private RateSchemaRepository rateSchemaRepository;
+    private final RateSchemaRepository rateSchemaRepository;
 
     public void addRateSchema(RateSchema rateSchema){
 

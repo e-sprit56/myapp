@@ -14,4 +14,6 @@ import java.util.List;
 public interface PropertyRepository extends JpaRepository<Property, Long> {
 
     public List<Property> getPropertiesByOwner(User user);
+
+    public Property getPropertyById(long propertyId);
 }

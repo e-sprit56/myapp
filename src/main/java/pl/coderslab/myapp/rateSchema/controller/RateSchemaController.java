@@ -5,12 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pl.coderslab.myapp.rateSchema.model.RateComponent;
-import pl.coderslab.myapp.rateSchema.model.RateComponentContainer;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.coderslab.myapp.property.service.PropertyServiceImpl;
 import pl.coderslab.myapp.rateSchema.model.RateSchema;
 import pl.coderslab.myapp.rateSchema.service.RateSchemaService;
-
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.*;
 
@@ -20,42 +18,44 @@ import java.util.*;
 public class RateSchemaController {
 
     private final RateSchemaService rateSchemaService;
+    private final PropertyServiceImpl propertyService;
 
     @PostMapping("/addschema-components")
-    public String addRateSchemaComponents(@RequestParam long propertyId, Model model){
-//        przekazać dalej Propertyid
+    public String addRateSchemaComponents(@RequestParam long propertyId, Model model, RedirectAttributes redirectAttributes) {
+
         List<String> components = rateSchemaService.getRateComponentsTypes();
 
         model.addAttribute("components", components);
+        model.addAttribute("propertyId", propertyId);
 
         return "rates/choose-components";
     }
 
     @PostMapping("/add-rates-for-components")
-    public String addRatesForComponents(@RequestParam String[] components, Model model){
+    public String addRatesForComponents(@RequestParam String[] components, Model model, @RequestParam long propertyId) {
 
-        RateComponentContainer rateComponentContainer = new RateComponentContainer();
-        rateComponentContainer.setComponentList(rateSchemaService.getRateComponentList(components));
-        model.addAttribute("rateComponentContainer", rateComponentContainer);
+
+        RateSchema rateSchema = new RateSchema();
+        rateSchema.setComponentList(rateSchemaService.getRateComponentList(components));
+        rateSchema.setProperty(propertyService.getProperty(propertyId));
+
+        model.addAttribute("rateSchema", rateSchema);
 
         return "/rates/add-rates-for-components";
     }
 
     @PostMapping("generate-rate-schema")
-    public String generateRateSchema(@Valid RateComponentContainer rateComponentContainer, BindingResult result){
+    public String generateRateSchema(@Valid RateSchema rateSchema, BindingResult result) {
 
-        if(result.hasErrors()){
+        if (result.hasErrors()) {
             return "/rates/add-rates-for-components";
         }
 
-        System.out.println(rateComponentContainer);
+        rateSchemaService.addRateSchema(rateSchema);
 
-        return "/app";
+
+        return "/dashboard";
     }
-
-
-
-
 
 
 }
