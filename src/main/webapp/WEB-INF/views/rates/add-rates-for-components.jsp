@@ -21,6 +21,8 @@
 
     <form:form method="post" modelAttribute="rateSchema" action="/app/rateschema/generate-rate-schema">
 
+        <form:hidden path="property" />
+
         <c:forEach items="${rateSchema.componentList}" var="component" varStatus="status">
             <form:hidden path="componentList[${status.index}].type"/>
             <form:input path="componentList[${status.index}].plDescription" readonly="true"/>

@@ -17,8 +17,10 @@ public class RateSchema {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne
     private Property property;
+
     @OneToMany
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<RateComponent> componentList;
