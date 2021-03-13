@@ -36,7 +36,7 @@ public class RateSchemaController {
 
         RateComponentContainer rateComponentContainer = new RateComponentContainer();
         rateComponentContainer.setComponentList(rateSchemaService.getRateComponentList(components));
-        model.addAttribute("Components", rateComponentContainer);
+        model.addAttribute("rateComponentContainer", rateComponentContainer);
 
         return "/rates/add-rates-for-components";
     }

@@ -4,11 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.coderslab.myapp.property.model.Property;
 import pl.coderslab.myapp.rateSchema.model.RateComponent;
 import pl.coderslab.myapp.rateSchema.model.RateSchema;
 import pl.coderslab.myapp.rateSchema.repository.RateSchemaRepository;
-import pl.coderslab.myapp.security.CurrentUser;
+
 
 import java.util.*;
 
@@ -50,24 +49,6 @@ public class RateSchemaService {
         ComponentStringTypeMap.put("TV", RateComponent.Type.TV);
         ComponentStringTypeMap.put("Internet", RateComponent.Type.BROADBAND);
     }
-
-//    public Map<String, RateComponent.Type> getComponentsStringTypeMap(){
-//
-//        Map<String, RateComponent.Type> map = new HashMap<>();
-//
-//        return map;
-//    }
-//
-//    public List<RateComponent.Type> getRateTypes (List<String> list){
-//        List<RateComponent.Type> rateComponentsTypes = new ArrayList<>();
-//        list.forEach(name->{
-//            RateComponent.Type type= ComponentStringTypeMap.get(name);
-//            rateComponentsTypes.add(type);
-//
-//        });
-//
-//        return rateComponentsTypes;
-//    }
 
     public List<RateComponent> getRateComponentList(String[] components){
         List<String> componentsList = Arrays.asList(components);

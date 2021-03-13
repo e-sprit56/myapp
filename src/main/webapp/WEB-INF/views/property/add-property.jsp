@@ -30,7 +30,7 @@
     <form:errors path="streetAndNumber"/><br>
     Typ: <br>
     <form:select path="type">
-    <form:option value="0">--Wybierz--</form:option>
+<%--    <form:option value="0">--Wybierz--</form:option>--%>
     <form:options items="${types}"></form:options>
     </form:select>
 

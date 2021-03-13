@@ -27,12 +27,12 @@ public class RateComponent {
 
     private Type type;
 
-    @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer=3, fraction=2)
+    @DecimalMin(value = "0.0", inclusive = true)
+    @Digits(integer=4, fraction=2)
     private BigDecimal fixedRate;
 
-    @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer=3, fraction=2)
+    @DecimalMin(value = "0.0", inclusive = true)
+    @Digits(integer=4, fraction=3)
     private BigDecimal variableRate;
 
     private String plDescription;
