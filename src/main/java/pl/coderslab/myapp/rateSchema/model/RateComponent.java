@@ -37,4 +37,6 @@ public class RateComponent {
 
     private String plDescription;
 
+
+
 }
