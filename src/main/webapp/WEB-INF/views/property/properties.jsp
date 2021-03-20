@@ -25,7 +25,8 @@
                 <td>${property.shortName}</td>
                 <td>${property.type}</td>
                 <td>${property.owner.username}</td>
-                <td> <form method="post" action="/app/rateschema/addschema-components">
+                <td>
+                    <form method="post" action="/app/rateschema/addschema-components">
                         <input type="hidden" name="propertyId" value="${property.id}">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <button type="submit">Dodaj Schemat Rozliczeń</button>
@@ -35,6 +36,10 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <button type="submit">Dodaj Stan liczników</button>
                     </form>
+                    <form method="get" action="/app/usage/all-property-usage/${property.id}">
+                        <button type="submit">stany liczników</button>
+                    </form>
+
                 </form>
                 </td>
             </tr>

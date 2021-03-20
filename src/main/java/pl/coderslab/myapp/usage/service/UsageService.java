@@ -12,6 +12,7 @@ import pl.coderslab.myapp.rateSchema.model.RateSchema;
 import pl.coderslab.myapp.usage.model.UsageElement;
 import pl.coderslab.myapp.usage.model.UsageSchema;
 import pl.coderslab.myapp.usage.repository.UsageRepository;
+import pl.coderslab.myapp.usage.usageDTO.UsageDTO;
 
 @Service
 @Data
@@ -51,19 +52,6 @@ public class UsageService {
 
 	}
 
-
-
-
-//	public List<RateComponent> getRateComponentList(String[] components){
-//		List<String> componentsList = Arrays.asList(components);
-//		List<RateComponent> rateComponents = new ArrayList<>();
-//		componentsList.forEach(component->{
-//			RateComponent rateComponent = new RateComponent();
-//			rateComponent.setType(ComponentStringTypeMap.get(component));
-//			rateComponent.setPlDescription(component);
-//			rateComponents.add(rateComponent);
-//		});
-
 	public static List<Integer> months() {
 		return IntStream.rangeClosed(1, 12).boxed().collect(Collectors.toList());
 	}
@@ -74,6 +62,44 @@ public class UsageService {
 
 	public void addUsage(UsageSchema usage){
 		usageRepository.save(usage);
+	}
+
+	public List<UsageSchema> getAllUsageSchema(long propertyId){
+		return usageRepository.findAllByPropertyId(propertyId);
+	}
+
+	public List<UsageDTO> getUsageDtoList(List<UsageSchema> usageSchemaList){
+
+		List<UsageDTO> usageDTOList = new ArrayList<>();
+
+		usageSchemaList.forEach(usageSchema -> {
+			List<UsageElement> usageElementList = usageSchema.getUsageElementList();
+
+			UsageDTO usageDTO = new UsageDTO();
+
+			usageDTO.setMonth(usageSchema.getMonth());
+			usageDTO.setYear(usageDTO.getYear());
+
+			usageElementList.forEach(usageElement -> {
+				if(usageElement.getType() == RateComponent.Type.WATER){
+					usageDTO.setWaterUsage(usageElement.getUsage());
+					usageDTO.setWaterUsageSymbol(usageElement.getSymbol());
+				}
+				if(usageElement.getType() == RateComponent.Type.GAS){
+					usageDTO.setGasUsage(usageElement.getUsage());
+					usageDTO.setGasUsageSymbol(usageElement.getSymbol());
+				}
+				if(usageElement.getType() == RateComponent.Type.ELECTRICITY){
+					usageDTO.setElectricityUsage(usageElement.getUsage());
+					usageDTO.setElectricityUsageSymbol(usageElement.getSymbol());
+				}
+
+			});
+
+			usageDTOList.add(usageDTO);
+		});
+
+		return usageDTOList;
 	}
 
 

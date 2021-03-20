@@ -33,6 +33,8 @@
             <form:input path="usageElementList[${status.index}].usage"/>
             <form:input path="usageElementList[${status.index}].symbol"/><br><br>
         </c:forEach>
+        <form:hidden path="property"/>
+        <form:hidden path="rateSchema"/>
 
         <input type="submit" value="Zatwierdź">
 

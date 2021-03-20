@@ -7,9 +7,7 @@ import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.coderslab.myapp.property.service.PropertyServiceImpl;
 import pl.coderslab.myapp.rateSchema.model.RateComponent;
 import pl.coderslab.myapp.rateSchema.model.RateSchema;
@@ -17,6 +15,7 @@ import pl.coderslab.myapp.rateSchema.service.RateSchemaService;
 import pl.coderslab.myapp.usage.model.UsageSchema;
 import pl.coderslab.myapp.usage.model.UsageElement;
 import pl.coderslab.myapp.usage.service.UsageService;
+import pl.coderslab.myapp.usage.usageDTO.UsageDTO;
 
 import javax.validation.Valid;
 
@@ -34,21 +33,12 @@ public class UsageController {
 	public String addUsage(@RequestParam long propertyId, Model model){
 
 		RateSchema rateSchema = rateSchemaService.getRateSchemaByPropertyIdAndActive(propertyId, true);
+		List<RateComponent.Type> componentTypes = rateSchemaService.getComponentsTypes(rateSchema);
+		List<UsageElement> usageElementList = usageService.getUsageElementList(componentTypes);
 
 		UsageSchema usageSchema = new UsageSchema();
 		usageSchema.setRateSchema(rateSchema);
 		usageSchema.setProperty(rateSchema.getProperty());
-		List<RateComponent.Type> componentTypes = rateSchemaService.getComponentsTypes(rateSchema);
-//		List<UsageElement> usageElementList = new ArrayList<>();
-//
-//		componentTypes.forEach(type -> {
-//			UsageElement usageComponent = new UsageElement();
-//			usageComponent.setType(type);
-//			usageComponent.setSymbol(UsageService.typesAndSymbolsMap.get(type));
-//			usageElementList.add(usageComponent);
-//		});
-
-		List<UsageElement> usageElementList = usageService.getUsageElementList(componentTypes);
 		usageSchema.setUsageElementList(usageElementList);
 
 		model.addAttribute("usageSchema",usageSchema);
@@ -68,6 +58,19 @@ public class UsageController {
 		usageService.addUsage(usage);
 
 		return "dashboard";
+	}
+
+	@GetMapping("/all-property-usage/{propertyId}")
+	public String getAllPropertyUsage(@PathVariable("propertyId") long propertyId, Model model){
+
+		List<UsageSchema> allUsageSchema = usageService.getAllUsageSchema(propertyId);
+		List<UsageDTO> usageDTOList = usageService.getUsageDtoList(allUsageSchema);
+
+		model.addAttribute(usageDTOList);
+
+
+		return "/usage/usage-list";
+
 	}
 
 }
