@@ -78,7 +78,7 @@ public class UsageService {
 			UsageDTO usageDTO = new UsageDTO();
 
 			usageDTO.setMonth(usageSchema.getMonth());
-			usageDTO.setYear(usageDTO.getYear());
+			usageDTO.setYear(usageSchema.getYear());
 
 			usageElementList.forEach(usageElement -> {
 				if(usageElement.getType() == RateComponent.Type.WATER){
