@@ -30,6 +30,11 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <button type="submit">Dodaj Schemat Rozliczeń</button>
                     </form>
+                    <form method="post" action="/app/usage/add-usage">
+                        <input type="hidden" name="propertyId" value="${property.id}">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <button type="submit">Dodaj Stan liczników</button>
+                    </form>
                 </form>
                 </td>
             </tr>

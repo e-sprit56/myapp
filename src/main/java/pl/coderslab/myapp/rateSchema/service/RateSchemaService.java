@@ -18,10 +18,7 @@ public class RateSchemaService {
 
     private final RateSchemaRepository rateSchemaRepository;
 
-    public void addRateSchema(RateSchema rateSchema){
 
-        rateSchemaRepository.save(rateSchema);
-    }
 
     public List<String> getRateComponentsTypes(){
         List<String> typesList = new ArrayList<>();
@@ -60,6 +57,25 @@ public class RateSchemaService {
         });
 
         return  rateComponents;
+    }
+
+    public List<RateComponent.Type> getComponentsTypes(RateSchema rateSchema){
+        List<RateComponent> rateComponents = rateSchema.getComponentList();
+        List<RateComponent.Type> types = new ArrayList<>();
+
+        rateComponents.forEach(rateComponent -> {
+            types.add(rateComponent.getType());
+        });
+
+        return types;
+    }
+
+    public RateSchema getRateSchemaByPropertyIdAndActive(long propertyId, boolean active){
+        return  rateSchemaRepository.getRateSchemaByPropertyIdAndActive(propertyId, active);
+    }
+
+    public void saveRateSchema(RateSchema rateSchema){
+        rateSchemaRepository.save(rateSchema);
     }
 
 

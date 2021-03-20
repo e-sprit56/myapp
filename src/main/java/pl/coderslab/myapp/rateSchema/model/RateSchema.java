@@ -25,4 +25,10 @@ public class RateSchema {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<RateComponent> componentList;
 
+    private boolean active;
+
+
+
+
+
 }

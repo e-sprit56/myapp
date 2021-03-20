@@ -51,10 +51,16 @@ public class RateSchemaController {
             return "/rates/add-rates-for-components";
         }
 
-        rateSchemaService.addRateSchema(rateSchema);
+        RateSchema actualActiveRateSchema = rateSchemaService.getRateSchemaByPropertyIdAndActive(rateSchema.getProperty().getId(), true);
 
+        if(actualActiveRateSchema != null){
+            actualActiveRateSchema.setActive(false);
+            rateSchemaService.saveRateSchema(actualActiveRateSchema);
+        }
+        rateSchema.setActive(true);
+        rateSchemaService.saveRateSchema(rateSchema);
 
-        return "/dashboard";
+        return "redirect:/app/properties";
     }
 
 
