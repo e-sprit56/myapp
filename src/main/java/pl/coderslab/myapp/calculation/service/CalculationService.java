@@ -43,25 +43,49 @@ public class CalculationService {
         RateSchema rateSchema = currentUsageSchema.getRateSchema();
         Map<RateComponent.Type, Map<String, BigDecimal>> rateSchemaMap = rateSchemaService.getRateSchemaMap(rateSchema);
 
-
-        currentUsageMap.entrySet().forEach(entry ->{
-            CalculationComponent calculationComponent = new CalculationComponent();
-
+        rateSchemaMap.entrySet().forEach(entry->{
+            CalculationComponent component = new CalculationComponent();
             RateComponent.Type type = entry.getKey();
-            calculationComponent.setType(type);
-            calculationComponent.setFixedCost(rateSchemaMap.get(type).get("fixed"));
 
-            double typeCalculation = currentUsageMap.get(type) - previousUsageMap.get(type);
-            BigDecimal typeCalculationBigDecimal = new BigDecimal(typeCalculation);
-            BigDecimal variableCost = rateSchemaMap.get(type).get("variable").multiply(typeCalculationBigDecimal);
-            calculationComponent.setVariableCost(variableCost);
-            calculationComponent.setTotalCost(calculationComponent.getFixedCost().add(calculationComponent.getVariableCost()));
-
-            calculationComponentList.add(calculationComponent);
+            component.setType(type);
+            component.setFixedCost(entry.getValue().get("fixed"));
+            calculationComponentList.add(component);
         });
 
-        calculation.setCalculationComponentsList(calculationComponentList);
+        calculationComponentList.forEach(component->{
+            RateComponent.Type type= component.getType();
+            if(currentUsageMap.get(type)!= null && previousUsageMap.get(type)!=null) {
+                double typeCalculation = currentUsageMap.get(type) - previousUsageMap.get(type);
+                BigDecimal typeCalculationBigDecimal = new BigDecimal(typeCalculation);
+                BigDecimal variableCost = rateSchemaMap.get(type).get("variable").multiply(typeCalculationBigDecimal);
+                component.setVariableCost(variableCost);
+            }
+            if (component.getVariableCost() != null) {
+                component.setTotalCost(component.getFixedCost().add(component.getVariableCost()));
+            } else {
+                component.setTotalCost(component.getFixedCost());
+            }
 
+        });
+
+//        currentUsageMap.entrySet().forEach(entry ->{
+//            CalculationComponent calculationComponent = new CalculationComponent();
+//
+//            RateComponent.Type type = entry.getKey();
+//            calculationComponent.setType(type);
+//            calculationComponent.setFixedCost(rateSchemaMap.get(type).get("fixed"));
+//
+//            double typeCalculation = currentUsageMap.get(type) - previousUsageMap.get(type);
+//            BigDecimal typeCalculationBigDecimal = new BigDecimal(typeCalculation);
+//            BigDecimal variableCost = rateSchemaMap.get(type).get("variable").multiply(typeCalculationBigDecimal);
+//            calculationComponent.setVariableCost(variableCost);
+//            calculationComponent.setTotalCost(calculationComponent.getFixedCost().add(calculationComponent.getVariableCost()));
+//
+//            calculationComponentList.add(calculationComponent);
+//        });
+//
+//        calculation.setCalculationComponentsList(calculationComponentList);
+        calculation.setCalculationComponentsList(calculationComponentList);
         return calculation;
     }
 }
