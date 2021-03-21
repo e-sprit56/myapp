@@ -69,7 +69,7 @@ public class UsageService {
 	}
 
 	public UsageSchema findPreviousUsageSchema(int monthControlNumber){
-		return usageRepository.findUsageSchemaByMonthControlNumberLessThan(monthControlNumber);
+		return usageRepository.findFirstUsageSchemaByMonthControlNumberLessThanOrderByMonthControlNumberDesc(monthControlNumber);
 	}
 
 	public List<UsageSchema> getAllUsageSchema(long propertyId){
@@ -83,32 +83,38 @@ public class UsageService {
 		usageSchemaList.forEach(usageSchema -> {
 
 
-			UsageDTO usageDTO = new UsageDTO();
-			usageDTO.setMonth(usageSchema.getMonth());
-			usageDTO.setYear(usageSchema.getYear());
-
-			List<UsageElement> usageElementList = usageSchema.getUsageElementList();
-
-			usageElementList.forEach(usageElement -> {
-				if(usageElement.getType() == RateComponent.Type.WATER){
-					usageDTO.setWaterUsage(usageElement.getUsage());
-					usageDTO.setWaterUsageSymbol(usageElement.getSymbol());
-				}
-				if(usageElement.getType() == RateComponent.Type.GAS){
-					usageDTO.setGasUsage(usageElement.getUsage());
-					usageDTO.setGasUsageSymbol(usageElement.getSymbol());
-				}
-				if(usageElement.getType() == RateComponent.Type.ELECTRICITY){
-					usageDTO.setElectricityUsage(usageElement.getUsage());
-					usageDTO.setElectricityUsageSymbol(usageElement.getSymbol());
-				}
-
-			});
+			UsageDTO usageDTO = getUsageDTO(usageSchema);
 
 			usageDTOList.add(usageDTO);
 		});
 
 		return usageDTOList;
+	}
+
+	public UsageDTO getUsageDTO(UsageSchema usageSchema) {
+		UsageDTO usageDTO = new UsageDTO();
+		usageDTO.setId(usageSchema.getId());
+		usageDTO.setMonth(usageSchema.getMonth());
+		usageDTO.setYear(usageSchema.getYear());
+
+		List<UsageElement> usageElementList = usageSchema.getUsageElementList();
+
+		usageElementList.forEach(usageElement -> {
+			if(usageElement.getType() == RateComponent.Type.WATER){
+				usageDTO.setWaterUsage(usageElement.getUsage());
+				usageDTO.setWaterUsageSymbol(usageElement.getSymbol());
+			}
+			if(usageElement.getType() == RateComponent.Type.GAS){
+				usageDTO.setGasUsage(usageElement.getUsage());
+				usageDTO.setGasUsageSymbol(usageElement.getSymbol());
+			}
+			if(usageElement.getType() == RateComponent.Type.ELECTRICITY){
+				usageDTO.setElectricityUsage(usageElement.getUsage());
+				usageDTO.setElectricityUsageSymbol(usageElement.getSymbol());
+			}
+
+		});
+		return usageDTO;
 	}
 
 	public int getAbsolutMonthNumber(int month, int year){

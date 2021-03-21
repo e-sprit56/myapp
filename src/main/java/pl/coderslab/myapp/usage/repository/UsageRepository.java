@@ -13,5 +13,5 @@ public interface UsageRepository extends JpaRepository<UsageSchema, Long> {
 
     UsageSchema findUsageSchemaById(long usageSchemaId);
 
-    UsageSchema findUsageSchemaByMonthControlNumberLessThan(int monthControlNumber);
+    UsageSchema findFirstUsageSchemaByMonthControlNumberLessThanOrderByMonthControlNumberDesc(int monthControlNumber);
 }

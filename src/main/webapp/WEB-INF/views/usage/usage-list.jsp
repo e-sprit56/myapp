@@ -21,7 +21,7 @@
             <th>Woda</th>
             <th>Prąd</th>
             <th>Gaz</th>
-            <th></th>
+            <th>akcje</th>
         </tr>
         <c:forEach items="${usageDTOList}" var="usage">
             <tr>
@@ -30,6 +30,12 @@
                 <td>${usage.waterUsage} ${usage.waterUsageSymbol}</td>
                 <td>${usage.electricityUsage} ${usage.electricityUsageSymbol}</td>
                 <td>${usage.gasUsage} ${usage.gasUsageSymbol}</td>
+                <td>
+                    </form>
+                    <form method="get" action="/app/calculation/create-calculation/${usage.id}">
+                        <button type="submit">stany liczników</button>
+                    </form>
+                </td>
             </tr>
         </c:forEach>
     </table>

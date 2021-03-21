@@ -14,6 +14,8 @@ import pl.coderslab.myapp.usage.model.UsageSchema;
 import pl.coderslab.myapp.usage.service.UsageService;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -33,6 +35,7 @@ public class CalculationService {
 
     public Calculation createCalculation(UsageSchema currentUsageSchema, UsageSchema previousUsageSchema){
         Calculation calculation = new Calculation();
+        List<CalculationComponent> calculationComponentList = new ArrayList<>();
 
         Map<RateComponent.Type, Double> currentUsageMap = usageService.usageSchemaElementsToMap(currentUsageSchema);
         Map<RateComponent.Type, Double> previousUsageMap = usageService.usageSchemaElementsToMap(previousUsageSchema);
@@ -51,9 +54,13 @@ public class CalculationService {
             double typeCalculation = currentUsageMap.get(type) - previousUsageMap.get(type);
             BigDecimal typeCalculationBigDecimal = new BigDecimal(typeCalculation);
             BigDecimal variableCost = rateSchemaMap.get(type).get("variable").multiply(typeCalculationBigDecimal);
-
             calculationComponent.setVariableCost(variableCost);
+            calculationComponent.setTotalCost(calculationComponent.getFixedCost().add(calculationComponent.getVariableCost()));
+
+            calculationComponentList.add(calculationComponent);
         });
+
+        calculation.setCalculationComponentsList(calculationComponentList);
 
         return calculation;
     }

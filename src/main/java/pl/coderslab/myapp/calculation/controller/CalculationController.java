@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.coderslab.myapp.calculation.model.Calculation;
 import pl.coderslab.myapp.calculation.service.CalculationService;
@@ -19,8 +20,8 @@ public class CalculationController {
 
     private final UsageService usageService;
 
-    @GetMapping
-    public String addCalculation(long usageSchemaId, Model model){
+    @GetMapping("/create-calculation/{usageSchemaId}")
+    public String addCalculation(@PathVariable("usageSchemaId") long usageSchemaId, Model model){
 
         UsageSchema currentUsageSchema = usageService.findUsageSchemaById(usageSchemaId);
         UsageSchema previousUsageSchema = usageService.findPreviousUsageSchema(currentUsageSchema.getMonthControlNumber());
@@ -34,18 +35,19 @@ public class CalculationController {
         if(monthsBetweenUsage == 1) {
 
             Calculation calculation = calculationService.createCalculation(currentUsageSchema, previousUsageSchema);
-            model.addAttribute("calculation", calculation);
-            return "/calculation-result";
+            calculationService.saveCalculation(calculation);
+//            model.addAttribute("calculation", calculation);
+            return "calculation/calculation-result";
 
         }
 
-        model.addAttribute("months", monthsBetweenUsage);
-        model.addAttribute("previousUsage", usageService.)
+//        model.addAttribute("months", monthsBetweenUsage);
+//        model.addAttribute("previousUsage", usageService.)
 
 
 
 
-
+return "/dashboard";
 
 
 

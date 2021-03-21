@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class UsageDTO {
 
+    private long id;
+
     private int year;
 
     private int month;
