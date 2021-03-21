@@ -34,6 +34,8 @@ public class UsageSchema {
 
 	private int year;
 
+	private int monthControlNumber;
+
 	@PrePersist
 	protected void onCreate() {
 		created_at = LocalDate.now();

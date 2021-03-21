@@ -9,6 +9,7 @@ import pl.coderslab.myapp.rateSchema.model.RateSchema;
 import pl.coderslab.myapp.rateSchema.repository.RateSchemaRepository;
 
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -70,12 +71,32 @@ public class RateSchemaService {
         return types;
     }
 
+    public Map<RateComponent.Type, Map<String, BigDecimal>> getRateSchemaMap(RateSchema rateSchema){
+
+        Map<RateComponent.Type, Map<String, BigDecimal>> rateSchemaMap = new HashMap<>();
+
+        rateSchema.getComponentList().forEach(rateComponent -> {
+
+            Map<String, BigDecimal> rateComponentMap = new HashMap<>();
+            rateComponentMap.put("fixed", rateComponent.getFixedRate());
+            rateComponentMap.put("variable", rateComponent.getVariableRate());
+
+            rateSchemaMap.put(rateComponent.getType(), rateComponentMap);
+        });
+
+        return rateSchemaMap;
+    }
+
     public RateSchema getRateSchemaByPropertyIdAndActive(long propertyId, boolean active){
         return  rateSchemaRepository.getRateSchemaByPropertyIdAndActive(propertyId, active);
     }
 
     public void saveRateSchema(RateSchema rateSchema){
         rateSchemaRepository.save(rateSchema);
+    }
+
+    public RateSchema getRateSchema(long rateSchemaId){
+        return rateSchemaRepository.getRateSchemaById(rateSchemaId);
     }
 
 

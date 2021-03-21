@@ -55,6 +55,8 @@ public class UsageController {
 			return "usage/add-usage";
 		}
 
+		usage.setMonthControlNumber(usageService.getAbsolutMonthNumber(usage.getMonth(),usage.getYear()));
+
 		usageService.addUsage(usage);
 
 		return "dashboard";

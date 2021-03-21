@@ -29,6 +29,7 @@ public class Property {
     private String postCode;
 
     private String streetAndNumber;
+
     @Enumerated(EnumType.STRING)
     private Type type;
 }
