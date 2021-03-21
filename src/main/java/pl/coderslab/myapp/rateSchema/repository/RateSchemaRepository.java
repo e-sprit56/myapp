@@ -8,4 +8,6 @@ import pl.coderslab.myapp.rateSchema.model.RateSchema;
 public interface RateSchemaRepository extends JpaRepository<RateSchema, Long> {
 
     RateSchema getRateSchemaByPropertyIdAndActive(long propertyId, boolean isActive);
+
+    RateSchema getRateSchemaById(long rateSchemaId);
 }

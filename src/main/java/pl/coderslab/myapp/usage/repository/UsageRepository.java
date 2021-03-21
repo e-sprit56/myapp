@@ -10,4 +10,8 @@ import java.util.List;
 public interface UsageRepository extends JpaRepository<UsageSchema, Long> {
 
     List<UsageSchema> findAllByPropertyId(long propertyId);
+
+    UsageSchema findUsageSchemaById(long usageSchemaId);
+
+    UsageSchema findFirstUsageSchemaByMonthControlNumberLessThanOrderByMonthControlNumberDesc(int monthControlNumber);
 }

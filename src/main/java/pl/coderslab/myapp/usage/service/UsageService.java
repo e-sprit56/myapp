@@ -64,6 +64,14 @@ public class UsageService {
 		usageRepository.save(usage);
 	}
 
+	public UsageSchema findUsageSchemaById (long id){
+		return usageRepository.findUsageSchemaById(id);
+	}
+
+	public UsageSchema findPreviousUsageSchema(int monthControlNumber){
+		return usageRepository.findFirstUsageSchemaByMonthControlNumberLessThanOrderByMonthControlNumberDesc(monthControlNumber);
+	}
+
 	public List<UsageSchema> getAllUsageSchema(long propertyId){
 		return usageRepository.findAllByPropertyId(propertyId);
 	}
@@ -73,33 +81,54 @@ public class UsageService {
 		List<UsageDTO> usageDTOList = new ArrayList<>();
 
 		usageSchemaList.forEach(usageSchema -> {
-			List<UsageElement> usageElementList = usageSchema.getUsageElementList();
 
-			UsageDTO usageDTO = new UsageDTO();
 
-			usageDTO.setMonth(usageSchema.getMonth());
-			usageDTO.setYear(usageSchema.getYear());
-
-			usageElementList.forEach(usageElement -> {
-				if(usageElement.getType() == RateComponent.Type.WATER){
-					usageDTO.setWaterUsage(usageElement.getUsage());
-					usageDTO.setWaterUsageSymbol(usageElement.getSymbol());
-				}
-				if(usageElement.getType() == RateComponent.Type.GAS){
-					usageDTO.setGasUsage(usageElement.getUsage());
-					usageDTO.setGasUsageSymbol(usageElement.getSymbol());
-				}
-				if(usageElement.getType() == RateComponent.Type.ELECTRICITY){
-					usageDTO.setElectricityUsage(usageElement.getUsage());
-					usageDTO.setElectricityUsageSymbol(usageElement.getSymbol());
-				}
-
-			});
+			UsageDTO usageDTO = getUsageDTO(usageSchema);
 
 			usageDTOList.add(usageDTO);
 		});
 
 		return usageDTOList;
+	}
+
+	public UsageDTO getUsageDTO(UsageSchema usageSchema) {
+		UsageDTO usageDTO = new UsageDTO();
+		usageDTO.setId(usageSchema.getId());
+		usageDTO.setMonth(usageSchema.getMonth());
+		usageDTO.setYear(usageSchema.getYear());
+
+		List<UsageElement> usageElementList = usageSchema.getUsageElementList();
+
+		usageElementList.forEach(usageElement -> {
+			if(usageElement.getType() == RateComponent.Type.WATER){
+				usageDTO.setWaterUsage(usageElement.getUsage());
+				usageDTO.setWaterUsageSymbol(usageElement.getSymbol());
+			}
+			if(usageElement.getType() == RateComponent.Type.GAS){
+				usageDTO.setGasUsage(usageElement.getUsage());
+				usageDTO.setGasUsageSymbol(usageElement.getSymbol());
+			}
+			if(usageElement.getType() == RateComponent.Type.ELECTRICITY){
+				usageDTO.setElectricityUsage(usageElement.getUsage());
+				usageDTO.setElectricityUsageSymbol(usageElement.getSymbol());
+			}
+
+		});
+		return usageDTO;
+	}
+
+	public int getAbsolutMonthNumber(int month, int year){
+		return month+(year-2020)*12;
+	}
+
+	public Map<RateComponent.Type, Double> usageSchemaElementsToMap(UsageSchema usageSchema){
+		Map<RateComponent.Type, Double> typeAndUsageMap= new HashMap<>();
+
+		usageSchema.getUsageElementList().forEach(usageElement -> {
+			typeAndUsageMap.put(usageElement.getType(),usageElement.getUsage());
+		});
+
+		return typeAndUsageMap;
 	}
 
 
