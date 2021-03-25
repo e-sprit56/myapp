@@ -17,7 +17,7 @@
 
     <br>
 
-    Podaj stawki za miesiąc: <br>
+            Podaj stawki za miesiąc: <br>
 
     <form:form method="post" modelAttribute="rateSchema" action="/app/rateschema/generate-rate-schema">
 

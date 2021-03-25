@@ -24,7 +24,7 @@ public class CalculationController {
     public String addCalculation(@PathVariable("usageSchemaId") long usageSchemaId, Model model) {
 
         UsageSchema currentUsageSchema = usageService.findUsageSchemaById(usageSchemaId);
-        UsageSchema previousUsageSchema = usageService.findPreviousUsageSchema(currentUsageSchema.getMonthControlNumber());
+        UsageSchema previousUsageSchema = usageService.findPreviousUsageSchema(currentUsageSchema.getProperty(), currentUsageSchema.getMonthControlNumber());
 
         if (previousUsageSchema == null) {
             return "/calculation/no-calculation";
