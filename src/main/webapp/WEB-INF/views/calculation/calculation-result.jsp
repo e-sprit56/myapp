@@ -17,7 +17,7 @@
 
     <form:form modelAttribute="calculation">
 
-        Okres: ${calculation.period}<br>
+        <h4>Okres: ${calculation.period}</h4>
 
         Najem: ${calculation.rent.fixedCost}<br>
 

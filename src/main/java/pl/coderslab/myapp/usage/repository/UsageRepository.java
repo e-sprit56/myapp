@@ -2,6 +2,8 @@ package pl.coderslab.myapp.usage.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import pl.coderslab.myapp.property.model.Property;
+import pl.coderslab.myapp.rateSchema.model.RateSchema;
 import pl.coderslab.myapp.usage.model.UsageSchema;
 
 import java.util.List;
@@ -13,5 +15,5 @@ public interface UsageRepository extends JpaRepository<UsageSchema, Long> {
 
     UsageSchema findUsageSchemaById(long usageSchemaId);
 
-    UsageSchema findFirstUsageSchemaByMonthControlNumberLessThanOrderByMonthControlNumberDesc(int monthControlNumber);
+    UsageSchema findFirstUsageSchemaByPropertyAndMonthControlNumberLessThanOrderByMonthControlNumberDesc(Property property, int monthControlNumber);
 }

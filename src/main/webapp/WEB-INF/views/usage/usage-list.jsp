@@ -14,7 +14,7 @@
 
 <div class="main">
 
-    <table>
+    <table class="tg">
         <tr>
             <th>Rok</th>
             <th>Miesiac</th>
@@ -33,7 +33,7 @@
                 <td>
                     </form>
                     <form method="get" action="/app/calculation/create-calculation/${usage.id}">
-                        <button type="submit">stany liczników</button>
+                        <button type="submit">Wygeneruj rozliczenie</button>
                     </form>
                 </td>
             </tr>

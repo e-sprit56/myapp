@@ -4,9 +4,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.sun.el.stream.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
+import pl.coderslab.myapp.property.model.Property;
 import pl.coderslab.myapp.rateSchema.model.RateComponent;
 import pl.coderslab.myapp.rateSchema.model.RateSchema;
 import pl.coderslab.myapp.usage.model.UsageElement;
@@ -68,8 +70,8 @@ public class UsageService {
 		return usageRepository.findUsageSchemaById(id);
 	}
 
-	public UsageSchema findPreviousUsageSchema(int monthControlNumber){
-		return usageRepository.findFirstUsageSchemaByMonthControlNumberLessThanOrderByMonthControlNumberDesc(monthControlNumber);
+	public UsageSchema findPreviousUsageSchema(Property property,int monthControlNumber){
+		return usageRepository.findFirstUsageSchemaByPropertyAndMonthControlNumberLessThanOrderByMonthControlNumberDesc(property, monthControlNumber);
 	}
 
 	public List<UsageSchema> getAllUsageSchema(long propertyId){

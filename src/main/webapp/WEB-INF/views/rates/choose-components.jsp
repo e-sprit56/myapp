@@ -13,10 +13,9 @@
 <body>
 <jsp:include page="../components/sidenav.jsp"/>
 
-
-Wybierz element do rozliczeń
-
 <div class="main">
+
+    <h4>Wybierz element do rozliczeń</h4><br>
 
 <form method=post action="/app/rateschema/add-rates-for-components">
 
@@ -25,7 +24,7 @@ Wybierz element do rozliczeń
 
 <c:forEach items="${components}" var="component">
 
-    ${component}<input type="checkbox" value="${component}" name="components">
+    ${component}<input type="checkbox" value="${component}" name="components"><br><br>
 
 </c:forEach>
 

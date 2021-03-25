@@ -13,7 +13,7 @@
 <jsp:include page="../components/sidenav.jsp"/>
 <div class="main">
 
-    <table>
+    <table class="tg">
         <tr>
             <th>Nazwa</th>
             <th>Typ</th>
@@ -29,15 +29,15 @@
                     <form method="post" action="/app/rateschema/addschema-components">
                         <input type="hidden" name="propertyId" value="${property.id}">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                        <button type="submit">Dodaj Schemat Rozliczeń</button>
+                        <button type="submit">Ustaw Stawki Rozliczeń</button>
                     </form>
                     <form method="post" action="/app/usage/add-usage">
                         <input type="hidden" name="propertyId" value="${property.id}">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                        <button type="submit">Dodaj Stan liczników</button>
+                        <button type="submit">Dodaj Stan Liczników</button>
                     </form>
                     <form method="get" action="/app/usage/all-property-usage/${property.id}">
-                        <button type="submit">stany liczników</button>
+                        <button type="submit">Stany Liczników</button>
                     </form>
 
                 </form>
