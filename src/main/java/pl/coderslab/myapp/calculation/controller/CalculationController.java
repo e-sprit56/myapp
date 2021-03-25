@@ -21,39 +21,23 @@ public class CalculationController {
     private final UsageService usageService;
 
     @GetMapping("/create-calculation/{usageSchemaId}")
-    public String addCalculation(@PathVariable("usageSchemaId") long usageSchemaId, Model model){
+    public String addCalculation(@PathVariable("usageSchemaId") long usageSchemaId, Model model) {
 
         UsageSchema currentUsageSchema = usageService.findUsageSchemaById(usageSchemaId);
         UsageSchema previousUsageSchema = usageService.findPreviousUsageSchema(currentUsageSchema.getMonthControlNumber());
 
-        if(previousUsageSchema==null){
-            return "/dashboard";
+        if (previousUsageSchema == null) {
+            return "/calculation/no-calculation";
         }
 
-        int monthsBetweenUsage = currentUsageSchema.getMonthControlNumber()- previousUsageSchema.getMonthControlNumber();
+        int monthsBetweenUsage = currentUsageSchema.getMonthControlNumber() - previousUsageSchema.getMonthControlNumber();
 
-        if(monthsBetweenUsage == 1) {
-
-            Calculation calculation = calculationService.createCalculation(currentUsageSchema, previousUsageSchema);
-            calculationService.saveCalculation(calculation);
-//            model.addAttribute("calculation", calculation);
-            return "calculation/calculation-result";
-
-        }
-
-//        model.addAttribute("months", monthsBetweenUsage);
-//        model.addAttribute("previousUsage", usageService.)
-
-
-
-
-return "/dashboard";
-
-
-
-
+        Calculation calculation = calculationService.createCalculation(currentUsageSchema, previousUsageSchema, monthsBetweenUsage);
+        calculationService.saveCalculation(calculation);
+        model.addAttribute("calculation", calculationService.creatCalculationDto(calculation));
+        return "calculation/calculation-result";
 
     }
 
-
 }
+

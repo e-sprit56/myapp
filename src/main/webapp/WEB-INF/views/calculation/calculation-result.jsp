@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: konrad
@@ -7,10 +9,36 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<head>
-    <title>Title</title>
-</head>
+<jsp:include page="../components/app-head.jsp"/>
 <body>
+<jsp:include page="../components/sidenav.jsp"/>
+
+<div class="main">
+
+    <form:form modelAttribute="calculation">
+
+        Okres: ${calculation.period}<br>
+
+        Najem: ${calculation.rent.fixedCost}<br>
+
+        Opłaty administracyjne: ${calculation.administration.fixedCost}<br>
+
+        Woda: ${calculation.water.totalCost}<br>
+        opłaty stałe: ${calculation.water.fixedCost}<br>
+        opłaty zmienne: ${calculation.water.variableCost}<br>
+        Gaz: ${calculation.gas.totalCost}<br>
+        opłaty stałe: ${calculation.gas.fixedCost}<br>
+        opłaty zmienne: ${calculation.gas.variableCost}<br>
+        Prąd: ${calculation.electricity.totalCost}<br>
+        opłaty stałe: ${calculation.electricity.fixedCost}<br>
+        opłaty zmienne: ${calculation.electricity.variableCost}<br>
+        Telewizja: ${calculation.tv.totalCost}<br>
+        Internet: ${calculation.broadband.totalCost}<br>
+
+    </form:form>
+
+
+</div>
 
 </body>
 </html>

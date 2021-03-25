@@ -17,4 +17,6 @@ public class Calculation {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<CalculationComponent> calculationComponentsList;
 
+    private String period;
+
 }
