@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.coderslab.myapp.calculation.CalculationDto.CalculationDto;
 import pl.coderslab.myapp.calculation.model.Calculation;
 import pl.coderslab.myapp.calculation.model.CalculationComponent;
 import pl.coderslab.myapp.calculation.repository.CalculationRepository;
@@ -14,9 +15,7 @@ import pl.coderslab.myapp.usage.model.UsageSchema;
 import pl.coderslab.myapp.usage.service.UsageService;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Data
@@ -33,7 +32,7 @@ public class CalculationService {
         calculationRepository.save(calculation);
     }
 
-    public Calculation createCalculation(UsageSchema currentUsageSchema, UsageSchema previousUsageSchema){
+    public Calculation createCalculation(UsageSchema currentUsageSchema, UsageSchema previousUsageSchema, int months){
         Calculation calculation = new Calculation();
         List<CalculationComponent> calculationComponentList = new ArrayList<>();
 
@@ -44,48 +43,80 @@ public class CalculationService {
         Map<RateComponent.Type, Map<String, BigDecimal>> rateSchemaMap = rateSchemaService.getRateSchemaMap(rateSchema);
 
         rateSchemaMap.entrySet().forEach(entry->{
-            CalculationComponent component = new CalculationComponent();
+
+            CalculationComponent calculationComponent = new CalculationComponent();
+
+            BigDecimal monthsBigDec = new BigDecimal(months);
+
             RateComponent.Type type = entry.getKey();
+            calculationComponent.setType(type);
 
-            component.setType(type);
-            component.setFixedCost(entry.getValue().get("fixed"));
-            calculationComponentList.add(component);
+            BigDecimal fixedCost = Optional.ofNullable(entry.getValue().get("fixed")).orElse(new BigDecimal(0));
+            calculationComponent.setFixedCost(fixedCost.multiply(monthsBigDec));
+
+            double currentUsage = Optional.ofNullable(currentUsageMap.get(type)).orElse(0d);
+            double previousUsage = Optional.ofNullable(previousUsageMap.get(type)).orElse(0d);
+
+            double typeCalculation = currentUsage - previousUsage;
+
+            BigDecimal typeCalculationBigDecimal = new BigDecimal(typeCalculation);
+
+            BigDecimal variebleCost = Optional.ofNullable(rateSchemaMap.get(type).get("variable")).orElse(new BigDecimal(0));
+            BigDecimal variableCost = variebleCost.multiply(typeCalculationBigDecimal);
+
+            calculationComponent.setVariableCost(variableCost);
+            calculationComponent.setTotalCost(calculationComponent.getFixedCost().add(calculationComponent.getVariableCost()));
+
+            calculationComponentList.add(calculationComponent);
+
+
         });
 
-        calculationComponentList.forEach(component->{
-            RateComponent.Type type= component.getType();
-            if(currentUsageMap.get(type)!= null && previousUsageMap.get(type)!=null) {
-                double typeCalculation = currentUsageMap.get(type) - previousUsageMap.get(type);
-                BigDecimal typeCalculationBigDecimal = new BigDecimal(typeCalculation);
-                BigDecimal variableCost = rateSchemaMap.get(type).get("variable").multiply(typeCalculationBigDecimal);
-                component.setVariableCost(variableCost);
-            }
-            if (component.getVariableCost() != null) {
-                component.setTotalCost(component.getFixedCost().add(component.getVariableCost()));
-            } else {
-                component.setTotalCost(component.getFixedCost());
-            }
 
-        });
-
-//        currentUsageMap.entrySet().forEach(entry ->{
-//            CalculationComponent calculationComponent = new CalculationComponent();
-//
-//            RateComponent.Type type = entry.getKey();
-//            calculationComponent.setType(type);
-//            calculationComponent.setFixedCost(rateSchemaMap.get(type).get("fixed"));
-//
-//            double typeCalculation = currentUsageMap.get(type) - previousUsageMap.get(type);
-//            BigDecimal typeCalculationBigDecimal = new BigDecimal(typeCalculation);
-//            BigDecimal variableCost = rateSchemaMap.get(type).get("variable").multiply(typeCalculationBigDecimal);
-//            calculationComponent.setVariableCost(variableCost);
-//            calculationComponent.setTotalCost(calculationComponent.getFixedCost().add(calculationComponent.getVariableCost()));
-//
-//            calculationComponentList.add(calculationComponent);
-//        });
-//
-//        calculation.setCalculationComponentsList(calculationComponentList);
         calculation.setCalculationComponentsList(calculationComponentList);
+        calculation.setPeriod(setPeriod(currentUsageSchema,previousUsageSchema));
+
+
         return calculation;
     }
+
+    private String setPeriod(UsageSchema currentUsageSchema, UsageSchema previousUsageSchema){
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(previousUsageSchema.getMonth()).append("/").append(previousUsageSchema.getYear())
+                .append(" - ").append(currentUsageSchema.getMonth()).append("/").append(currentUsageSchema.getYear());
+
+        return stringBuilder.toString();
+    }
+
+    private Map<RateComponent.Type, CalculationComponent> getCalculationComponentsMap(Calculation calculation){
+
+        Map<RateComponent.Type, CalculationComponent> calculationComponentMap = new HashMap<>();
+
+        calculation.getCalculationComponentsList().forEach(component -> {
+            calculationComponentMap.put(component.getType(), component);
+        });
+        return calculationComponentMap;
+
+    }
+
+    public CalculationDto creatCalculationDto(Calculation calculation){
+        CalculationDto calculationDto = new CalculationDto();
+
+        Map<RateComponent.Type, CalculationComponent> calculationComponentMap = getCalculationComponentsMap(calculation);
+
+        calculationDto.setPeriod(calculation.getPeriod());
+        calculationDto.setRent(calculationComponentMap.get(RateComponent.Type.RENT));
+        calculationDto.setAdministration(calculationComponentMap.get(RateComponent.Type.ADMINISTRATION));
+        calculationDto.setWater(calculationComponentMap.get(RateComponent.Type.WATER));
+        calculationDto.setGas(calculationComponentMap.get(RateComponent.Type.GAS));
+        calculationDto.setElectricity(calculationComponentMap.get(RateComponent.Type.ELECTRICITY));
+        calculationDto.setTv(calculationComponentMap.get(RateComponent.Type.TV));
+        calculationDto.setBroadband(calculationComponentMap.get(RateComponent.Type.BROADBAND));
+
+        return calculationDto;
+
+    }
+
+
 }

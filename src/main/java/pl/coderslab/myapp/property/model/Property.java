@@ -25,7 +25,7 @@ public class Property {
     private User owner;
 
     private String city;
-    //@Pattern(regexp = "[0-9]{2}/-[0-9]{3}", message = "format 00-000")
+    @Pattern(regexp = "[0-9]{2}-[0-9]{3}", message = "format 00-000")
     private String postCode;
 
     private String streetAndNumber;

@@ -6,6 +6,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
@@ -23,10 +25,10 @@ public class UsageElement {
 	@Enumerated(EnumType.STRING)
 	private RateComponent.Type type;
 
+	@Digits(integer = 5, fraction = 4, message ="podaj liczbe")
 	private Double usage;
 
 	private String symbol;
 
-//	private String description;
 
 }
