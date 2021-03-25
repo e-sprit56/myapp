@@ -70,26 +70,6 @@ public class CalculationService {
 
         });
 
-//        currentUsageMap.entrySet().forEach(entry ->{
-//            CalculationComponent calculationComponent = new CalculationComponent();
-//
-//            BigDecimal monthsBigDec = new BigDecimal(months);
-//
-//            RateComponent.Type type = entry.getKey();
-//            calculationComponent.setType(type);
-//            calculationComponent.setFixedCost(rateSchemaMap.get(type).get("fixed").multiply(monthsBigDec));
-//
-//            double typeCalculation = currentUsageMap.get(type) - previousUsageMap.get(type);
-//
-//            BigDecimal typeCalculationBigDecimal = new BigDecimal(typeCalculation);
-//            BigDecimal variableCost = rateSchemaMap.get(type).get("variable").multiply(typeCalculationBigDecimal);
-//
-//            calculationComponent.setVariableCost(variableCost);
-//            calculationComponent.setTotalCost(calculationComponent.getFixedCost().add(calculationComponent.getVariableCost()));
-//
-//            calculationComponentList.add(calculationComponent);
-//        });
-
         calculation.setCalculationComponentsList(calculationComponentList);
         calculation.setPeriod(setPeriod(currentUsageSchema,previousUsageSchema));
 

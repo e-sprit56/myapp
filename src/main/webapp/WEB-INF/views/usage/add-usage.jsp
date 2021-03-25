@@ -21,17 +21,18 @@
 
         Rok :
         <form:select path="year">
-             <form:options items="${years}"></form:options>
+             <form:options items="${year}"></form:options>
         </form:select><br>
         Miesiąc :
         <form:select path="month">
-            <form:options items="${months}"></form:options>
+            <form:options items="${month}"></form:options>
         </form:select><br>
         Stan liczników:
         <c:forEach items="${usageSchema.usageElementList}" var="components" varStatus="status">
             <form:input path="usageElementList[${status.index}].type" readonly="true"/>
             <form:input path="usageElementList[${status.index}].usage"/>
-            <form:input path="usageElementList[${status.index}].symbol"/><br><br>
+            <form:errors path="usageElementList[${status.index}].usage"/>
+            <form:input path="usageElementList[${status.index}].symbol" readonly="true"/><br><br>
         </c:forEach>
         <form:hidden path="property"/>
         <form:hidden path="rateSchema"/>

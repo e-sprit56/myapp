@@ -33,6 +33,11 @@ public class UsageController {
 	public String addUsage(@RequestParam long propertyId, Model model){
 
 		RateSchema rateSchema = rateSchemaService.getRateSchemaByPropertyIdAndActive(propertyId, true);
+
+		if(rateSchema==null){
+			return "usage/no-rate-schema";
+		}
+
 		List<RateComponent.Type> componentTypes = rateSchemaService.getComponentsTypes(rateSchema);
 		List<UsageElement> usageElementList = usageService.getUsageElementList(componentTypes);
 
@@ -42,16 +47,18 @@ public class UsageController {
 		usageSchema.setUsageElementList(usageElementList);
 
 		model.addAttribute("usageSchema",usageSchema);
-		model.addAttribute("months", UsageService.months());
-		model.addAttribute("years", UsageService.years());
+		model.addAttribute("month", UsageService.months());
+		model.addAttribute("year", UsageService.years());
 
 		return "usage/add-usage";
 
 	}
 	@PostMapping("/add-usage-save")
-	public String addUsage(@Valid UsageSchema usage, BindingResult result){
+	public String addUsage(@Valid UsageSchema usage, BindingResult result, Model model){
 
 		if (result.hasErrors()){
+			model.addAttribute("month", UsageService.months());
+			model.addAttribute("year", UsageService.years());
 			return "usage/add-usage";
 		}
 
