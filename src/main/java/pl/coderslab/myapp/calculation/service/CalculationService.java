@@ -43,6 +43,7 @@ public class CalculationService {
         Map<RateComponent.Type, Map<String, BigDecimal>> rateSchemaMap = rateSchemaService.getRateSchemaMap(rateSchema);
 
         rateSchemaMap.entrySet().forEach(entry->{
+
             CalculationComponent calculationComponent = new CalculationComponent();
 
             BigDecimal monthsBigDec = new BigDecimal(months);
@@ -68,10 +69,13 @@ public class CalculationService {
 
             calculationComponentList.add(calculationComponent);
 
+
         });
+
 
         calculation.setCalculationComponentsList(calculationComponentList);
         calculation.setPeriod(setPeriod(currentUsageSchema,previousUsageSchema));
+
 
         return calculation;
     }
