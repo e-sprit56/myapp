@@ -1,5 +1,6 @@
 package pl.coderslab.myapp.rateSchema.service;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,8 @@ import pl.coderslab.myapp.rateSchema.repository.RateSchemaRepository;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
@@ -19,19 +22,8 @@ public class RateSchemaService {
 
     private final RateSchemaRepository rateSchemaRepository;
 
-
-
     public List<String> getRateComponentsTypes(){
-        List<String> typesList = new ArrayList<>();
-        typesList.add("Wynajem");
-        typesList.add("Opłaty Administracyjne");
-        typesList.add("Woda");
-        typesList.add("Gaz");
-        typesList.add("Prąd");
-        typesList.add("TV");
-        typesList.add("Internet");
-
-        return typesList;
+        return Stream.of(RateComponent.Type.values()).map(RateComponent.Type::getDescription).collect(Collectors.toList());
     }
 
     public static Map<String, RateComponent.Type> ComponentStringTypeMap;
