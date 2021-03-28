@@ -17,8 +17,28 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class RateComponent {
 
+
+
     public enum Type {
-        WATER, ELECTRICITY, GAS, RENT, ADMINISTRATION, TV, BROADBAND
+        WATER("Woda", "m3"), ELECTRICITY("Prąd", "kwh"), GAS("Gaz", "m3"), RENT("Najem", null), ADMINISTRATION("Opłaty administracyjne", null),
+        TV("Telewizja", null), BROADBAND("Internet", null);
+
+        public final String description;
+
+        public final String symbol;
+
+        Type(String description, String symbol) {
+            this.description = description;
+            this.symbol = symbol;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
     }
 
     @Id
@@ -28,14 +48,15 @@ public class RateComponent {
     private Type type;
 
     @DecimalMin(value = "0.0", inclusive = true, message = "podaj wartość liczbową w formacie 00.00")
-    @Digits(integer=4, fraction=2)
+    @Digits(integer = 4, fraction = 2)
     private BigDecimal fixedRate;
 
     @DecimalMin(value = "0.0", inclusive = true, message = "podaj wartość liczbową w formacie 00.00")
-    @Digits(integer=4, fraction=3)
+    @Digits(integer = 4, fraction = 3)
     private BigDecimal variableRate;
 
     private String plDescription;
+
 
 
 
